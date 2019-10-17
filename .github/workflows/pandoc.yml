@@ -8,7 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - uses: actions/checkout@v1
-    - uses: maxheld83/pandoc
     - name: Pandoc
-      run: pandoc -f markdown -t pdf -o README.pdf README.md
+    - uses: maxheld83/pandoc@v0.1.0
+    - env:
+      OUT_DIR: "/"
+    - args:
+      "-f markdown",
+      "-t pdf",
+      "-o README.pdf",
+      "README.md"
