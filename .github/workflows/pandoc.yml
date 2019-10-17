@@ -1,0 +1,13 @@
+name: Pandoc
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Pandoc
+      run: pandoc -f markdown -t pdf -o README.pdf README.md
