@@ -46,13 +46,11 @@ Let $\mathcal{B} = \{True, False\}$ be the Boolean set.
 
 Consider the relation
 
-$$
-e_f: \mathcal{I} \times \mathcal{I} \rightarrow \mathcal{B}
-$$
-$$
-e_f(a, b) = \left\{\frac{|a \cap b|}{|a|} \ge f \right\} \bigwedge \left\{\frac{|a \cap b|}{|b|} \ge f\right\}
-$$
-
+\begin{align*}
+e_f & : \mathcal{I} \times \mathcal{I} \rightarrow \mathcal{B} \\
+e_f(a, b) &= \left\{\frac{|a \cap b|}{|a|} \ge f \right\} \bigwedge \left\{\frac{|a \cap b|}{|b|} \ge f\right\}
+\end{align*}
+ 
 where $f \in [0, 1], a, b \in \mathcal{I}$.
 
 ### Proposition: $e_f$ is an equivalence relation $\iff f \in \{0, 1\}$
@@ -64,9 +62,14 @@ In the boundary cases for $f$, $f = 1$ reduces to the canonical equivalence rela
 Thus $f \in \{0, 1\} \implies e_f$ is an equivalence relation.
 
 Let $F = \lceil \frac{1}{1-f} \rceil$, and consider the intervals $a_0 = [0, F), a_1 = [1, F + 1), ..., a_F = [F, 2F + 1)$ (Figure 2).
-$$
-e_f(a_0, a_1) = \left\{\frac{|[1, F)|}{|[0, F)|} \ge f \right\} \bigwedge \left\{\frac{|[1, F)|}{|[1, F+1)|} \ge f\right\} = \left\{\frac{F - 1}{F} \ge f \right\} = \left\{1 - \frac{1}{F} \ge f \right\} = \left\{1 - (1-f) \ge f \right\} = True
-$$
+
+\begin{align*}
+e_f(a_0, a_1)
+    &= \left\{\frac{|[1, F)|}{|[0, F)|} \ge f \right\} \bigwedge \left\{\frac{|[1, F)|}{|[1, F+1)|} \ge f\right\} \\
+    &= \left\{\frac{F - 1}{F} \ge f \right\} = \left\{1 - \frac{1}{F} \ge f \right\} \\
+    &= \left\{1 - (1-f) \ge f \right\} \\
+    &= True
+\end{align*}
 
 Similarly, $e_f(a_i, a_{i+1}) = True \forall i \in {0, .. F - 1}$.
 However, $a_0 \cap a_F = \empty$, thus $e_f(a_0, a_F) = False$.
@@ -81,21 +84,21 @@ While $e_f$ is not explicitly an equivalence relation, we can use it to define a
 Intuitively, we can define the _similarity_ of two intervals by the maximum fraction of symmetric overlap.
 Mathematically,
 
-$$
-s: \mathcal{I} \times \mathcal{I} \rightarrow [0, 1]
-$$
-$$
-s(a, b) = \argmax_f \left\{e_f(a, b) = True \right\} = \min\left\{\frac{|a \cap b|}{|a|}, \frac{|a \cap b|}{|b|}\right\}
-$$
+\begin{align*}
+s &: \mathcal{I} \times \mathcal{I} \rightarrow [0, 1] \\
+s(a, b)
+    &= \arg\max_f \left\{e_f(a, b) = True \right\} \\
+    &= \min\left\{\frac{|a \cap b|}{|a|}, \frac{|a \cap b|}{|b|}\right\}
+\end{align*}
 
 This can easily be extended to an arbitrary number of intervals by considering all pairs of intervals in the set.
 
-$$
-s: 2^\mathcal{I} \rightarrow [0, 1]
-$$
-$$
-s(A) = \argmax_f \left\{e_f(a, b) = True \forall a, b \in A \right\} = \inf_{a, b \in A}\left\{\frac{|a \cap b|}{|a|}\right\}
-$$
+\begin{align*}
+s &: 2^\mathcal{I} \rightarrow [0, 1] \\
+s(A) 
+    &= \arg\max_f \left\{e_f(a, b) = True \forall a, b \in A \right\} \\
+    &= \inf_{a, b \in A}\left\{\frac{|a \cap b|}{|a|}\right\}
+\end{align*}
 
 It is worth noting that if $|A| < \infty$, $s$ is monotonically increasing on subsets of $A$, which we prove below.
 
@@ -104,9 +107,12 @@ It is worth noting that if $|A| < \infty$, $s$ is monotonically increasing on su
 Let $A = \{a_1, ..., a_n\}$ be a finite subset of $\mathcal{I}$.
 Then
 
-$$
-s(A) = \min\left\{\min_{a, b \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap b|}{|a|} \right\}, \min_{a \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap a_n|}{|a|}, \frac{|a_n \cap a|}{|a_n|} \right\}, \frac{|a_n \cap a_n|}{|a_n|} \right\} = \min\left\{ s(\{a_1, ..., a_{n-1}\}), \min_{a \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap a_n|}{|a|}, \frac{|a_n \cap a|}{|a_n|} \right\}, 1 \right\} \le s(\{a_1, ..., a_{n-1}\})
-$$
+\begin{align*}
+s(A) 
+    &= \min\left\{\min_{a, b \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap b|}{|a|} \right\}, \min_{a \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap a_n|}{|a|}, \frac{|a_n \cap a|}{|a_n|} \right\}, \frac{|a_n \cap a_n|}{|a_n|} \right\} \\
+    &= \min\left\{ s(\{a_1, ..., a_{n-1}\}), \min_{a \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap a_n|}{|a|}, \frac{|a_n \cap a|}{|a_n|} \right\}, 1 \right\} \\
+    &\le s(\{a_1, ..., a_{n-1}\})
+\end{align*}
 
 This is true for any $a \in A$, thus $s(A) \le s(B) \forall B \subset A$.
 $\square$
