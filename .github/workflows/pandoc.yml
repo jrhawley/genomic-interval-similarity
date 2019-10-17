@@ -10,10 +10,9 @@ jobs:
     steps:
     - name: Pandoc
     - uses: maxheld83/pandoc@v0.1.0
-    - env:
-      OUT_DIR: "/"
-    - args:
+    - args: [
       "-f markdown",
       "-t pdf",
       "-o README.pdf",
       "README.md"
+    ]
