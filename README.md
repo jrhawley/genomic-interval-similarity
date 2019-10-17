@@ -127,3 +127,6 @@ Now that we have a quantitative notion[^1] of similarity of intervals, we can us
 
 # Section 3
 
+Differential analysis in bioinformatics is the process of identifying statistically significant differences between two conditions.
+For example, this could be mutant vs wild type or treatment vs control.
+
