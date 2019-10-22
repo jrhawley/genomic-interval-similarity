@@ -1,5 +1,23 @@
 # Similarity of genomic intervals
 
+## Table of Contents
+
+- [Similarity of genomic intervals](#similarity-of-genomic-intervals)
+  - [Table of Contents](#table-of-contents)
+  - [Introduction](#introduction)
+- [Problem inspiration](#problem-inspiration)
+- [Section 2](#section-2)
+  - [Definitions](#definitions)
+  - [Relation on intervals](#relation-on-intervals)
+    - [Proposition: $e_f$ is an equivalence relation $\iff f \in \{0, 1\}$](#proposition-ef-is-an-equivalence-relation-iff-f-in-0-1)
+  - [Similarity of intervals](#similarity-of-intervals)
+    - [Proposition: $s$ is monotonically increasing on subsets of $A$](#proposition-s-is-monotonically-increasing-on-subsets-of-a)
+- [Section 3](#section-3)
+  - [_A priori_ differential analysis](#a-priori-differential-analysis)
+  - [_De novo_ differential analysis](#de-novo-differential-analysis)
+
+## Introduction
+
 When performing genomic analyses, data are often presented in the form of genomic intervals.
 These are nuleotide positions that are calculated with respect to some reference genome.
 They can correspond to the positions of particular genes on a given chromosome, deletions present in the genome of a person with a particular cancer, or a genomic loci where a particular protein binds.
@@ -108,7 +126,7 @@ Let $A = \{a_1, ..., a_n\}$ be a finite subset of $\mathcal{I}$.
 Then
 
 \begin{align*}
-s(A) 
+s(A)
     &= \min\left\{\min_{a, b \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap b|}{|a|} \right\}, \min_{a \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap a_n|}{|a|}, \frac{|a_n \cap a|}{|a_n|} \right\}, \frac{|a_n \cap a_n|}{|a_n|} \right\} \\
     &= \min\left\{ s(\{a_1, ..., a_{n-1}\}), \min_{a \in \{a_1, ..., a_{n-1}\}} \left\{\frac{|a \cap a_n|}{|a|}, \frac{|a_n \cap a|}{|a_n|} \right\}, 1 \right\} \\
     &\le s(\{a_1, ..., a_{n-1}\})
@@ -127,6 +145,23 @@ Now that we have a quantitative notion[^1] of similarity of intervals, we can us
 
 # Section 3
 
-Differential analysis in bioinformatics is the process of identifying statistically significant differences between two conditions.
-For example, this could be mutant vs wild type or treatment vs control.
+Differential analysis in bioinformatics is the process of identifying statistically significant differences between conditions.
+For example, this could be differential expression of transcripts in mutant versus wild type conditions.
+Differential analysis typically comes in two varieties: _a priori_ and _de novo_.
 
+## _A priori_ differential analysis
+
+_A priori_ differential analysis results from known differences in condition, like the previous example.
+The response variable is modelled as a (often linear) function of the covariate(s) of interest.
+This model is fit to the data to estimate noise and account for technical artefacts[^2], and null hypothesis significance testing is then carried out on the coefficient to the covariate(s) of interest [REF].
+
+[^2]: In DNA sequencing data, technical artefacts can include over-dispersion of variance, sequencing depth of each sample, and sequencing batch. Differential analysis also requires controlling for nuisance variables that may confound the results if not properly controlled for (e.g. the effect of gender when measuring drug response in patients with or without a mutation).
+
+## _De novo_ differential analysis
+
+While the goals of _de novo_ and _a priori_ differential analysis are the same they differ in detection and controlling for false discoveries.
+_De novo_ differential analysis stems from the discovery of differences between subsets of samples that aren't previously stratified according to some known covariate.
+These differences must be detected in the first place (without knowledge of nuisance covariates), which itself is typically a statistical procedure.
+Since the detection step enriches for likely differential intervals, the resulting p-values from the hypothesis testing will not abide by the uniform distribution assumed by most multiple-testing correction procedures.
+
+If we wish to perform some type of differential analysis on our intervals in $n$ samples (or at the very least, identify locations where some subset of samples differ), this amounts to partitioning $n$ samples into $k \ge 2$ groups.
