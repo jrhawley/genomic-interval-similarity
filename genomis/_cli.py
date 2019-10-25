@@ -22,7 +22,7 @@ def validate(ARGS):
             raise IOError(
                 "`--names` and `bed` must have the same number of arguments if `--names` is specified."
             )
-    return {"beds": ARGS.bed, "names": names, "prefix": ARGS.prefix}
+    return {"bedfiles": ARGS.bed, "names": names, "prefix": ARGS.prefix}
 
 
 def main():

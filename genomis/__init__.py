@@ -1,7 +1,35 @@
+import numpy as np
+from intervaltree import Interval
+
 __version__ = "0.0.1"
 
 
-def gis(beds, names, prefix):
+class Bed:
+    def __init__(self, fn=None):
+        """
+        Initialize object by storing file
+        """
+        self.file = fn
+        self.fh = open(self.file, "r")
+
+    def next(self):
+        """
+        Pop next interval from the BED file
+        """
+        newline = self.fh.readline()
+        if newline != "":
+            chrom, start, end = newline.rstrip().split("\t")
+            return Interval(int(start), int(end), chrom)
+        return None
+
+    def close(self):
+        """
+        Close object and release from memory
+        """
+        self.fh.close()
+
+
+def gis(bedfiles, names=None, prefix="similarity"):
     """
     Calculate genomic similarity of BED files
 
@@ -14,5 +42,8 @@ def gis(beds, names, prefix):
     prefix : str
         Output file prefix
     """
-    pass
-
+    # file handles for each BED file
+    n = len(bedfiles)
+    # initialize `bed` objects
+    beds = [Bed(b) for b in bedfiles]
+    return beds
