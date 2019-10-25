@@ -39,7 +39,7 @@ setup(
         "pybedtools",
         "biopython",
         "tqdm",
-        "intervaltree",
+        "pyinterval",
     ],
     entry_points={"console_scripts": ["gis=genomis._cli:main"]},
     zip_safe=True,
