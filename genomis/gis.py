@@ -53,7 +53,10 @@ class Bed:
         """
         newline = self.fh.readline()
         if newline != "":
-            chrom, start, end = newline.rstrip().split("\t")
+            vals = newline.rstrip().split("\t")
+            chrom = vals[0]
+            start = vals[1]
+            end = vals[2]
             self.counter += 1
             return GenomicInterval(chrom, start, end)
         return None
@@ -89,6 +92,8 @@ def similarity(a, b):
     if a.chr == b.chr:
         intersection = a.interval & b.interval
         a_int_b = GenomicInterval(a.chr, intersection[0].inf, intersection[0].sup)
+        if len(a_int_b) == 0:
+            return 0
         return min([len(a_int_b) / len(a), len(a_int_b) / len(b)])
     else:
         return 0
