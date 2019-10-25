@@ -29,6 +29,18 @@ class Bed:
         self.fh.close()
 
 
+def symmetrize(a):
+    """
+    Symmetrize a matrix
+
+    Parameters
+    ----------
+    a : numpy.array
+        Matrix to be symmetrized
+    """
+    return (a + a.T) / 2
+
+
 def gis(bedfiles, names=None, prefix="similarity"):
     """
     Calculate genomic similarity of BED files
@@ -44,6 +56,9 @@ def gis(bedfiles, names=None, prefix="similarity"):
     """
     # file handles for each BED file
     n = len(bedfiles)
+    # store similarity matrix
+    sim_mat = symmetrize(np.zeros((n, n)))
+    print(sim_mat)
     # initialize `bed` objects
     beds = [Bed(b) for b in bedfiles]
     return beds
