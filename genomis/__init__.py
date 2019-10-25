@@ -14,10 +14,14 @@ class GenomicInterval(object):
         self.chr = chrom
         self.inf = int(start)
         self.sup = int(end)
+        self.size = self.sup - self.inf
         self.interval = interval([self.inf, self.sup])
 
     def __str__(self):
         return self.chr + ":" + str(self.inf) + "-" + str(self.sup)
+
+    def __len__(self):
+        return self.size
 
 
 class Bed:
@@ -27,6 +31,7 @@ class Bed:
         """
         self.file = fn
         self.fh = open(self.file, "r")
+        self.counter = -1
 
     def next(self):
         """
@@ -35,6 +40,7 @@ class Bed:
         newline = self.fh.readline()
         if newline != "":
             chrom, start, end = newline.rstrip().split("\t")
+            self.counter += 1
             return GenomicInterval(chrom, start, end)
         return None
 
@@ -43,6 +49,13 @@ class Bed:
         Close object and release from memory
         """
         self.fh.close()
+
+
+# class SymArray(np.array):
+#     def __setitem__(self, indexes, value):
+#         i, j = indexes
+#         super(SymArray, self).__setitem__((i, j), value)
+#         super(SymArray, self).__setitem__((j, i), value)
 
 
 def symmetrize(a):
@@ -54,7 +67,7 @@ def symmetrize(a):
     a : numpy.array
         Matrix to be symmetrized
     """
-    return a + a.T - np.diag(np.diag(a))
+    return a + a.T - np.diag(a.diagonal())
 
 
 def similarity(a, b):
@@ -69,12 +82,7 @@ def similarity(a, b):
     if a.chr == b.chr:
         intersection = a.interval & b.interval
         a_int_b = GenomicInterval(a.chr, intersection[0].inf, intersection[0].sup)
-        return min(
-            [
-                (a_int_b.sup - a_int_b.inf) / (a.sup - a.inf),
-                (a_int_b.sup - a_int_b.inf) / (b.sup - b.inf),
-            ]
-        )
+        return min([len(a_int_b) / len(a), len(a_int_b) / len(b)])
     else:
         return 0
 
