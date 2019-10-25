@@ -2,6 +2,7 @@ import numpy as np
 from interval import interval
 from itertools import combinations
 import pandas as pd
+from natsort import natsorted
 
 
 class GenomicInterval(object):
@@ -46,6 +47,9 @@ class Bed:
         self.file = fn
         self.fh = open(self.file, "r")
         self.counter = -1
+
+    def __iter__(self):
+        return self
 
     def next(self):
         """
@@ -140,12 +144,12 @@ def gis(bedfiles, names=None, prefix="similarity", sim_thresh=0.5):
     # iterate over intervals from the sorted BED files
     while True:
         minsim_set = min([ms["s"] for ms in minsim])
-        # record this set if the similarity of the set passes the threshold
-        if minsim_set >= sim_thresh:
-            chrom = intvls[0].chr
-            # skip if not all intervals are on the same chromosome
-            if np.all([intvl.chr == chrom for intvl in intvls]):
-                # find interval that spans entire set of intervals
+        chrom = intvls[0].chr
+        # skip if not all intervals are on the same chromosome
+        # find interval that spans entire set of intervals
+        if np.all([intvl.chr == chrom for intvl in intvls]):
+            # record this set if the similarity of the set passes the threshold
+            if minsim_set >= sim_thresh:
                 hull = interval.hull([intvl.interval for intvl in intvls])
                 set_locus = GenomicInterval(chrom, hull[0].inf, hull[0].sup)
                 records.append(
@@ -163,6 +167,22 @@ def gis(bedfiles, names=None, prefix="similarity", sim_thresh=0.5):
                         )
                     )
                 )
+        else:
+            # update to latest chromosome and skip remaining intervals
+            # get latest chromosome (via `natsorted` to account for chromosome names)
+            newchrom = natsorted([intvl.chr for intvl in intvls])[-1]
+            for i in range(n):
+                if intvls[i].chr == newchrom:
+                    skip_idx = i
+                    break
+            # keep track of which samples to update
+            samples_to_update = list(range(skip_idx)) + list(range(skip_idx + 1, n))
+            for i in samples_to_update:
+                while True:
+                    # iterate through intervals in BED files until all samples are on the new chromosome
+                    intvls[i] = beds[i].next()
+                    if intvls[i].chr == newchrom:
+                        break
         # find sample with the smallest upper bound
         update_idx = np.argmin([intvl.sup for intvl in intvls])
         # pop this interval

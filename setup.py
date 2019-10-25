@@ -33,7 +33,7 @@ setup(
         "Natural Language :: English",
     ],
     packages=find_packages(),
-    install_requires=["numpy>=1.11", "pandas >= 0.15.0", "pyinterval"],
+    install_requires=["numpy>=1.11", "pandas >= 0.15.0", "pyinterval", "natsort"],
     entry_points={"console_scripts": ["gis=genomis._cli:main"]},
     zip_safe=True,
     long_description=long_description,
