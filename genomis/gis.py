@@ -126,7 +126,7 @@ def gis(bedfiles, names=None, prefix="similarity", sim_thresh=0.5):
     # store similarity matrix
     sim_mat = np.identity(n)
     # columns of information to store
-    column_names = ["chr", "start", "end"] + names + ["similarity"]
+    column_names = ["chr", "start", "end"] + ["similarity"] + names
     # initialize `bed` objects
     beds = [Bed(b) for b in bedfiles]
     # get first intervals from each file
@@ -161,8 +161,8 @@ def gis(bedfiles, names=None, prefix="similarity", sim_thresh=0.5):
                                 set_locus.chr,
                                 set_locus.inf,
                                 set_locus.sup,
-                                *[b.counter for b in beds],
                                 minsim_set,
+                                *[b.counter for b in beds],
                             ],
                         )
                     )
