@@ -34,7 +34,7 @@ Should this overlap be the same between the two intervals, or should it be based
 How does the binary operation of interval intersection extend to $n > 2$ samples?
 An example of the scenario can be visualized in Fig 1.
 
-![Figure 1: genome segmentation in multiple samples. Segments are called independently in each sample. The problem consists of determining which segment matches with other segments in other samples, and whether the variation in endpoints is due to a true biological process or error associated with calling the segment boundaries.](primary-example.png)
+![Genome segmentation in multiple samples. Segments are called independently in each sample. The problem consists of determining which segment matches with other segments in other samples, and whether the variation in endpoints is due to a true biological process or error associated with calling the segment boundaries.](primary-example.png)
 
 In this paper, we address these questions by extending the notion of "equivalence" to a more general mathematical relation, and use this notion to define a measure of similarity that accounts for $n > 2$ samples.
 We use this as a guiding principle to explore how large genomic intervals should be considered in the context of recurrence.
@@ -54,7 +54,7 @@ Determining the boundaries of these TADs, and how similar they are between sampl
 An example of this idea can be seen in Figure 2.
 Our goal for the remainder of this paper is to develop a method to identify intervals that are different for a subset of samples that may be of biological interest.
 
-![Figure 2. Schematic showing the problem of interest, where one calls topologically associated domains (TADs) from Hi-C contact matrices and compares the called TADs between samples.](hic-example-tads.png)
+![Schematic showing the problem of interest, where one calls topologically associated domains (TADs) from Hi-C contact matrices and compares the called TADs between samples.](hic-example-tads.png)
 
 # Section 2
 
