@@ -32,9 +32,9 @@ Does overlap of a single nucleotide count as recurrence of the interval as a who
 Should there be a minimum overlap required between the intervals being compared?
 Should this overlap be the same between the two intervals, or should it be based on the percentage of the interval that is overlapped by the other?
 How does the binary operation of interval intersection extend to $n > 2$ samples?
-An example of the scenario can be visualized in Fig 1.
+An example of the scenario can be visualized in \ref{genome_seg}.
 
-![Genome segmentation in multiple samples. Segments are called independently in each sample. The problem consists of determining which segment matches with other segments in other samples, and whether the variation in endpoints is due to a true biological process or error associated with calling the segment boundaries.](primary-example.png)
+![Genome segmentation in multiple samples. Segments are called independently in each sample. The problem consists of determining which segment matches with other segments in other samples, and whether the variation in endpoints is due to a true biological process or error associated with calling the segment boundaries. \label{genome_seg}](primary-example.png)
 
 In this paper, we address these questions by extending the notion of "equivalence" to a more general mathematical relation, and use this notion to define a measure of similarity that accounts for $n > 2$ samples.
 We use this as a guiding principle to explore how large genomic intervals should be considered in the context of recurrence.
@@ -51,10 +51,10 @@ Briefly, certain genomic elements (genes, promoters, enhancers) come into spatia
 These hubs, termed topologically associated domains (TADs), are linear intervals in the genome, and identifying these TADs can lead to understanding the regulation of the genes within them [REF].
 
 Determining the boundaries of these TADs, and how similar they are between samples, can help identify novel modes of genetic regulation between samples.
-An example of this idea can be seen in Figure 2.
+An example of this idea can be seen in \ref{tad_seg}.
 Our goal for the remainder of this paper is to develop a method to identify intervals that are different for a subset of samples that may be of biological interest.
 
-![Schematic showing the problem of interest, where one calls topologically associated domains (TADs) from Hi-C contact matrices and compares the called TADs between samples.](hic-example-tads.png)
+![Schematic showing the problem of interest, where one calls topologically associated domains (TADs) from Hi-C contact matrices and compares the called TADs between samples. \label{tad_seg}](hic-example-tads.png)
 
 # Section 2
 
@@ -73,7 +73,7 @@ Consider the relation
 e_f & : \mathcal{I} \times \mathcal{I} \rightarrow \mathcal{B} \\
 e_f(a, b) &= \left\{\frac{|a \cap b|}{|a|} \ge f \right\} \bigwedge \left\{\frac{|a \cap b|}{|b|} \ge f\right\}
 \end{align*}
- 
+
 where $f \in [0, 1], a, b \in \mathcal{I}$.
 
 ### Proposition: $e_f$ is an equivalence relation $\iff f \in \{0, 1\}$
@@ -84,7 +84,9 @@ It remains to be shown that $e_f$ is transitive.
 In the boundary cases for $f$, $f = 1$ reduces to the canonical equivalence relation on intervals, and $f = 0$ reduces to the trivial equivalence relation ($e_0(a, b) = True \forall a, b \in \mathcal{I}$).
 Thus $f \in \{0, 1\} \implies e_f$ is an equivalence relation.
 
-Let $F = \lceil \frac{1}{1-f} \rceil$, and consider the intervals $a_0 = [0, F), a_1 = [1, F + 1), ..., a_F = [F, 2F + 1)$ (Figure 2).
+Let $F = \lceil \frac{1}{1-f} \rceil$, and consider the intervals $a_0 = [0, F), a_1 = [1, F + 1), ..., a_F = [F, 2F + 1)$ (\ref{shifting_example}).
+
+![Shifting set of intervals, each with an offset of 1 from the previous interval. $a_i$ and $a_{i+1}$ are all equivalent for a given $f$, but $a_0$ and $a_F$ have no intersection.\label{shifting_example}](shifting-counter-example.png)
 
 \begin{align*}
 e_f(a_0, a_1)
@@ -111,14 +113,14 @@ Mathematically,
 s &: \mathcal{I} \times \mathcal{I} \rightarrow [0, 1] \\
 s(a, b)
     &= \arg\max_f \left\{e_f(a, b) = True \right\} \\
-    &= \min\left\{\frac{|a \cap b|}{|a|}, \frac{|a \cap b|}{|b|}\right\}
+    &= \frac{|a \cap b|}{\max\left\{|a|, |b| \right\}}
 \end{align*}
 
 This can easily be extended to an arbitrary number of intervals by considering all pairs of intervals in the set.
 
 \begin{align*}
 s &: 2^\mathcal{I} \rightarrow [0, 1] \\
-s(A) 
+s(A)
     &= \arg\max_f \left\{e_f(a, b) = True \forall a, b \in A \right\} \\
     &= \inf_{a, b \in A}\left\{\frac{|a \cap b|}{|a|}\right\}
 \end{align*}
